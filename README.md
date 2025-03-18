@@ -1,6 +1,11 @@
-# Robotics_software_Dev_ROS1
-Learning robotics using ROS1 on a7DoF Kuka robotic arm
+# Robotics software Development with ROS1
+Learning robotics using ROS1 on a 7DoF Kuka robotic arm.
 
+Synopsis:
+- ROS concepts
+- urdf and xacro
+- kinematics and inverse kinematics with TF2 transforms
+- 
 
 ## Setup
 
@@ -10,7 +15,7 @@ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3.8
 
 ### task 1: basic publisher-listener
 
-![Kuka Robotic Arm](_images/task1.png)
+![Publisher-Subscriber communication](_images/01_pub-sub.png)
 
 ### task 2: 
 

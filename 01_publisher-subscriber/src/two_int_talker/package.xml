@@ -7,7 +7,7 @@
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="maxi@todo.todo">maxi</maintainer>
+  <maintainer email="user@todo.todo">maxi</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -42,12 +42,12 @@
   <buildtool_depend>catkin</buildtool_depend>
   
   <build_depend>rospy</build_depend>
-  <build_depend>my_listener</build_depend>
+  <build_depend>my_listener_pkg</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>message_generation</build_depend>
 
   <run_depend>rospy</run_depend>
-  <run_depend>my_listener</run_depend>
+  <run_depend>my_listener_pkg</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>message_runtime</run_depend>
 
