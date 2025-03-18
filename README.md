@@ -9,6 +9,7 @@ Synopsis:
 
 ## Setup
 
+source ROS before starting VScode if using ROS extension
 catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3.8
 
 ## Projects
@@ -19,6 +20,8 @@ catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3.8
 
 ### task 2: 
 
+![Transform publisher](_images/02_markers.png)
+![Markers in RVIZ](_images/02_rviz.png)
 
 
 ### task 3: 
