@@ -30,7 +30,7 @@ roscore
 # In a different terminal, launch the publisher
 rosrun marker_publisher marker_publisher
 # In a different terminal, launch the subscriber
-rosrun my_transform solution.py
+rosrun transform_publisher my_transform.py 
 # Launch RVIZ
 # on WSL2, you may need: export LIBGL_ALWAYS_INDIRECT=
 rosrun rviz rviz

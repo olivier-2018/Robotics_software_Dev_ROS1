@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="marker_publisher" type="marker_publisher" name="marker_publisher" output="screen" />
+    
+    <node pkg="transform_publisher" type="my_transform.py" name="transform_publisher" output="screen" />
+    
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find transform_publisher)/launch/transform_publisher.rviz"   />
+</launch>
