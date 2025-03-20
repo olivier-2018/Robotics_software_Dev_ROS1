@@ -6,11 +6,15 @@
                 "${workspaceFolder}/**",
                 "/opt/ros/noetic/include"
             ],
+            "browse": {
+              "databaseFilename": "${default}",
+              "limitSymbolsToIncludedHeaders": false
+            },
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "cStandard": "c++14",                   // "c11", "gnu11", "c++14"
+            "intelliSenseMode": "linux-gcc-x64",    //  "gcc-x64",
+            "cppStandard": 
         }
     ],
     "version": 4
