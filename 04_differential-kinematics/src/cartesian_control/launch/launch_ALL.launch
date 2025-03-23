@@ -1,0 +1,10 @@
+<launch>
+    <rosparam param="robot_description" command="load" file="$(find lwr_defs)/urdf/kuka_lwr_arm.urdf" />
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find cartesian_control)/config/rviz.rviz" />
+    <node pkg="robot_sim" type="robot_sim_bringup" name="robot_sim" output="screen" />
+    <!-- <node pkg="robot_sim2" type="position_command.py" name="position_command" output="screen" /> -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="transform_publisher" output="screen" />
+
+    <node pkg="cartesian_control" type="marker_control.py" name="cartesian_control" output="screen" />    
+</launch>
+

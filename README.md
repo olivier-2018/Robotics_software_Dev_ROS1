@@ -7,6 +7,10 @@ Synopsis:
 - kinematics  with TF2 transforms
 - 
 
+## Setup and dependencies
+sudo apt install python3-tk
+
+
 ## Tutorials
 
 ### turorial 1: basic publisher-listener
@@ -38,12 +42,17 @@ Some shortcuts:
 
 ## VScode ROS debugging
 
-ROS extension only allows launch file debugging
-Run & Debug > Select Launch File > ...
-1 - Select "ROS" (make sure you do not have a python or cpp file open)
-2 - Select "ROS: Launch"
-3 - Select package to be debugged
-4 - Select the launch file
-5 - Optional: In the launch.json file, set filter using "launch" to specify nodes NOT to attach the debugger to.
+ROS extension only allows launch file debugging  
+Run & Debug > Select Launch File > ...  
+1 - Select "ROS" (make sure you do not have a python or cpp file open)  
+2 - Select "ROS: Launch"  
+3 - Select package to be debugged  
+4 - Select the launch file  
+5 - Optional: In the launch.json file, set filter using "launch" to specify nodes NOT to attach the debugger to.  
 
-Best practice: Organize project in multiple launch files with few number of nodes to make it easier to debug (combine nodes that work together)
+Best practice: Organize project in multiple launch files with few number of nodes to make it easier to debug (combine nodes that work together)  
+
+Note: source the following:
+```bash
+export ROSCONSOLE_FORMAT="[\${severity}] [\${time:%Y-%m-%d %H:%M:%S}]: \${message}"
+```
