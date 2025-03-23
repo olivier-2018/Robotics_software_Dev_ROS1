@@ -4,37 +4,37 @@ Learning robotics using ROS1 on a 7DoF Kuka robotic arm.
 Synopsis:
 - ROS concepts
 - urdf and xacro
-- kinematics and inverse kinematics with TF2 transforms
+- kinematics  with TF2 transforms
 - 
 
-## Setup
+## Tutorials
 
-source ROS before starting VScode if using ROS extension
-catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3.8
+### turorial 1: basic publisher-listener
 
-## Projects
+<img src="_images/01_pub-sub.png" alt="Publisher-Subscriber communication" width="800">
 
-### task 1: basic publisher-listener
+### turorial 2: TF transforms between object frames
 
-![Publisher-Subscriber communication](_images/01_pub-sub.png)
-
-### task 2: 
-
-![Transform publisher](_images/02_markers.png)
-![Markers in RVIZ](_images/02_rviz.png)
+<img src="_images/02_markers.png" alt="Transform publisher" width="400">
+<img src="_images/02_rviz.png" alt="Markers in RVIZ" width="400">
 
 
-### task 3: 
+### turorial 3: TF transforms on KUKA LWR 7-DOF joint frames
+
+<img src="_images/03_kuka_home.png" alt="Robot home" height="500">
+<img src="_images/03_kuka_max.png" alt="Robot flex" height="500">
 
 
 ## VScode ROS extension
 
-settings
-
-CTRL+SHIFT+P : ros:start/stop roscore, click on ROS1.<distrib> bring roscore status
-CTRL+SHIFT+B : catkin_make options for building and sourcing automatically
-CTRL+SHIFT+P ros:create terminal --> create Terminal on clien (usefull if running VScode over SSH)
-CTRL+SHIFT+P ros:urdf --> uses ROS web tool to display urdf
+Some shortcuts:
+- CTRL+SHIFT+P : select "ros:start" to start roscore and source devel (click on ROS1.<distrib> to bring roscore status)  
+- CTRL+SHIFT+P : select "ros: stop" to stop roscore   
+- CTRL+SHIFT+P : select "ros: Update Python path", and ensure python interpreter is correct (/usr/bin/python3)     
+- CTRL+SHIFT+P : select "ros: Update C++ properties"   
+- CTRL+SHIFT+B : select "catkin_make: build" to  build project and sourcing automatically  
+- CTRL+SHIFT+P : "ros:create terminal" --> create Terminal on clien (usefull if running VScode over SSH)  
+- CTRL+SHIFT+P : "ros:urdf" --> uses ROS web tool to display urdf  
 
 ## VScode ROS debugging
 

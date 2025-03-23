@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="forward_kinematics" type="my_fwd_kinematics.py" name="fwd_kinematics.pysform_publisher" output="screen" />
+    
+</launch>

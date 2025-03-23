@@ -1,21 +1,21 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/opt/ros/noetic/include"
-            ],
-            "browse": {
-              "databaseFilename": "${default}",
-              "limitSymbolsToIncludedHeaders": false
-            },
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c++14",                   // "c11", "gnu11", "c++14"
-            "intelliSenseMode": "linux-gcc-x64",    //  "gcc-x64",
-            "cppStandard": 
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/alcor/Robotics_software_Dev_ROS1/03_fwd-kinematics/src/robot_sim/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
 }

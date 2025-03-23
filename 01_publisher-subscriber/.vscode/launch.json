@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [        
+        {
+            "name": "ROS: Launch Talker",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/two_int_talker/launch/talker.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros",
+            "env": {
+                // "ROSCONSOLE_FORMAT": "[\${severity}] [\${time:%Y-%m-%d %H:%M:%S}]: \${message}"
+                // "ROSCONSOLE_FORMAT": "[${severity}] [${time:%Y-%m-%d %H:%M:%S}] [${file}]: ${message}"  
+            }
+        },
+        {
+            "name": "ROS: Launch Talker & Listener",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/two_int_listener/launch/talker_and_listener.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros"
+        }
+    ]
+}

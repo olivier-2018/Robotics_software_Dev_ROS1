@@ -1,0 +1,12 @@
+<launch>
+    <rosparam param="robot_description" command="load" file="$(find lwr_defs)/urdf/kuka_lwr_arm.urdf" />
+
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find forward_kinematics)/config/fwd_kinematics.config.rviz" />
+   
+    <node pkg="robot_sim" type="robot_sim_bringup" name="robot_sim" output="screen" />
+    
+    <node pkg="robot_mover" type="mover" name="transform_publisher" output="screen" />
+
+    <node pkg="forward_kinematics" type="my_fwd_kinematics.py" name="fwd_kinematics.pysform_publisher" output="screen" />
+    
+</launch>

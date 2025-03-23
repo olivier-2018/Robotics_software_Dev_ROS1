@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ROS: Launch robot-mover",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/robot_mover/launch/launch_robot-mover.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros"
+        },
+        {
+            "name": "ROS: Launch fwd_kinematics",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/forward_kinematics/launch/launch_fwd_kinematics.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros"
+        },
+    ]
+}

@@ -1,8 +1,11 @@
-#!/usr/bin/env python3  
+#!/usr/bin/env python3
 import random
+import os
+from dotenv import load_dotenv
 import rospy
 from std_msgs.msg import Int16
 from two_int_listener.msg import TwoInts
+
 
 # Initialize the publisher
 def talker():
@@ -20,7 +23,7 @@ def talker():
         msg.a = random.randint(1,20)
         msg.b = random.randint(1,20)
         # Log the message
-        rospy.loginfo('Publishing: %i + %i', msg.a, msg.b)
+        rospy.loginfo(rospy.get_caller_id() + 'Publishing: %i + %i', msg.a, msg.b)
         rate = rospy.Rate(1)  
         # Publish the message
         pub.publish(msg)

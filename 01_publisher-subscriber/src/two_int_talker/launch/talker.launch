@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="two_int_talker" type="two_int_talker.py" name="two_int_talker" output="screen" />
+</launch> 

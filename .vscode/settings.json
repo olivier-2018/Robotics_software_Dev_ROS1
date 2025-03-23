@@ -1,6 +1,8 @@
 {
-    // "ros.distro": "noetic", // uncomment to set ROS distro
-    // "ros.rosSetupScript": "/opt/ros/noetic/setup.zsh",
+    "ros.distro": "noetic", 
+    // "ros.rosSetupScript": "/opt/ros/noetic/setup.zsh",    
+    // "python.pythonPath": "~/.pyenv/shims/python3", // Add your Python interpreter path here
+    "python.pythonPath": "/usr/bin/python3", 
     "python.analysis.extraPaths": [
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
@@ -12,5 +14,12 @@
         "string": "cpp",
         "vector": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    // "python.linting.pylintEnabled": true,
+    // "python.linting.pylintPath": "~/.pyenv/shims/pylint",
+    // "python.linting.enabled": true,
+    // "python.linting.flake8Enabled": true,
+    // "python.linting.flake8Path": "~/.pyenv/shims/flake8",
+    // "python.linting.banditEnabled": true,
+    // "python.linting.banditPath": "~/.pyenv/shims/bandit",
 }

@@ -13,7 +13,7 @@ def callback(data):
     #print("a(",data.a,") + b(",data.b,") = ",sum) 
     
     # Log the sum
-    rospy.loginfo(rospy.get_caller_id() + 'Sum: %i + %i = %i', data.a, data.b, data.a + data.b)
+    rospy.loginfo(rospy.get_caller_id() + ' Sum: %i + %i = %i', data.a, data.b, data.a + data.b)
     #rate = rospy.Rate(5)
     #rospy.loginfo(sum)
     rate = rospy.Rate(1)  

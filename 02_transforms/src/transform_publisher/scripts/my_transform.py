@@ -42,8 +42,8 @@ def publish_transforms():
     object_transform.transform = message_from_transform(T1)
     # Log translation and rotation info
     info = get_T_info(T1)
-    rospy.loginfo(f"BASE-->OBJECT transform (translation): {info[0]}mm")
-    rospy.loginfo(f"BASE-->OBJECT transform (rotation): {info[1]}deg")
+    rospy.loginfo(rospy.get_caller_id() + f" BASE-->OBJECT transform (translation): {info[0]}mm")
+    rospy.loginfo(rospy.get_caller_id() + f" BASE-->OBJECT transform (rotation): {info[1]}deg\n")
     # Publish the transform
     br.sendTransform(object_transform)
 
@@ -61,8 +61,8 @@ def publish_transforms():
     robot_transform.child_frame_id = "robot_frame"
     robot_transform.transform = message_from_transform(T2)
     info = get_T_info(T1)
-    rospy.loginfo(f"BASE-->ROBOT transform (translation): {info[0]}mm")
-    rospy.loginfo(f"BASE-->ROBOT transform (rotation): {info[1]}deg")
+    rospy.loginfo(rospy.get_caller_id() + f" BASE-->ROBOT transform (translation): {info[0]}mm")
+    rospy.loginfo(rospy.get_caller_id() + f" BASE-->ROBOT transform (rotation): {info[1]}deg\n")
     br.sendTransform(robot_transform)
 
     ### Setting CAMERA to OBJECT transform
@@ -107,8 +107,8 @@ def publish_transforms():
     camera_transform.child_frame_id = "camera_frame"
     # Log translation and rotation info
     info = get_T_info(T3)
-    rospy.loginfo(f"CAMERA-->OBJECT transform (translation): {info[0]}mm")
-    rospy.loginfo(f"CAMERA-->OBJECT transform (rotation): {info[1]}deg")
+    rospy.loginfo(rospy.get_caller_id() + f" CAMERA-->OBJECT transform (translation): {info[0]}mm")
+    rospy.loginfo(rospy.get_caller_id() + f" CAMERA-->OBJECT transform (rotation): {info[1]}deg|n")
     # Publish the transform
     camera_transform.transform = message_from_transform(T3)
     
