@@ -13,7 +13,10 @@ from std_msgs.msg import Float32
 from urdf_parser_py.urdf import URDF
 
 
-def S_matrix(w):    # Skew matrix
+def S_matrix(w):
+    """ This function computes the skew-symmetric matrix S corresponding to the input vector w. The skew-symmetric matrix is used
+    to represent the cross product operation in 3D space. 
+    """
     S = numpy.zeros((3,3))
     S[0,1] = -w[2]
     S[0,2] =  w[1]
@@ -25,19 +28,40 @@ def S_matrix(w):    # Skew matrix
 
 
 def rotation_matrix(matrix):
+    """ Extracts the rotation matrix from a 4x4 homogeneous transformation matrix.
+    """
     R = numpy.array(matrix, dtype=numpy.float64, copy=False)
     R33 = R[:3, :3]
     return R33
 
 
 def translation_matrix(matrix):
+    """ Extracts the translation vector from a 4x4 homogeneous transformation matrix.
+    """
     R = numpy.array(matrix, dtype=numpy.float64, copy=False)
     #t43 = numpy.zeros((3,1))
     #t43[:3] = R[:3, 3:]
     t43 = R[:3, 3]
     return t43
 
+def vector_norm_threshold(V, norm_threshold):
+    """ This function scales a vector V if its norm is above than the specified threshold.
+    """
+    vel_norm = numpy.linalg.norm(V)
+    if vel_norm > norm_threshold:
+        return V * (norm_threshold / vel_norm) 
+    else:
+        return V 
 
+def vector_component_threshold(V, norm_threshold):
+    """ This function scales a vector V if one of its component is above the specified threshold.
+    """
+    vel_norm = numpy.linalg.norm(V)
+    for Vi in V:
+        if abs(Vi) > norm_threshold:
+            V = V * (norm_threshold / abs(Vi))
+    return V 
+    
 def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
                       red_control, q_current, q0_desired):
     """The cartesian control function computes the joint velocities
@@ -66,24 +90,27 @@ def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
     EEcur_T_EEdes = numpy.matmul(ee_T_b_current, b_T_ee_desired)
     
     # Extract translation and rotation part of current-to-Desired Transform (EEcur_T_EEdes)
-    dX_trans = translation_matrix(EEcur_T_EEdes)
+    dX_ee_trans = translation_matrix(EEcur_T_EEdes)
     angle, axis = rotation_from_matrix(rotation_matrix(EEcur_T_EEdes))
-    dX_rot = angle * axis
+    dX_ee_rot = angle * axis
     
-    # TODO: introduce a tranlation and rotation velocity threshold
+    # scale translational and angular velocities
+    # vel_limit_trans = 0.1  # 0.1 m/s
+    # vel_limit_rot = 1.0  # 1.0 rad/s
+    # scaled_V_ee_trans = scale_velocity(V_ee_trans, vel_limit_trans)
+    # scaled_V_ee_rot = scale_velocity(V_ee_rot, vel_limit_rot)
     
-    # Compute dX (already in EE coordinate frame as computed from Transforms)
-    dX_eeframe = numpy.concatenate([dX_trans, dX_rot])
-    
-
-    # Compute End-Effector velocity Vee as a proportional system
-    gain = 2
-    Vee = gain * dX_eeframe 
+    # Compute End-Effector velocity components as simple proportional controllers
+    gain_trans, gain_rot = 2, 2
+    Xdot_ee_trans, Xdot_ee_rot = gain_trans * dX_ee_trans, gain_rot * dX_ee_rot
+        
+    # Compute End-Effector velocity
+    Vee = numpy.concatenate([Xdot_ee_trans, Xdot_ee_rot])
 
     ##### Compute Jacobian #####
     ############################
     Z = numpy.zeros((3,3))
-    J = []    
+    J = numpy.empty((6, 0))
     
     # For each joint Transform (i.e Transform from base frame to each joint frame), compute the Jacobian
     for b_T_j in joint_transforms:
@@ -100,36 +127,47 @@ def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
         # Compute Sym skew matrix
         RS = numpy.matmul(-ee_R_j, S_matrix(j_t_ee))
         
-        # Compute Vj iun general case
+        # Compute Vj in the general case
         Vj = numpy.concatenate([numpy.concatenate([ee_R_j,RS],axis=1),
                                  numpy.concatenate([Z    ,ee_R_j],axis=1)],axis=0)
         
-        # Extract last column (urdf assumptions)
-        J.append(Vj[:,5])
+        # Extract last column (D-H assumptions ie revolute joints around Z-axis)
+        J = numpy.column_stack((J, Vj[:,5])) 
     
-    Jacobian=numpy.array(J)
-    
-    # Compute Jacobian inverse using Moore-Penrose pseudo-inverse function 
-    Jinv = numpy.linalg.pinv(Jacobian.T, 0.001)
+    # Compute Jacobian-inverse using Moore-Penrose pseudo-inverse function  (Vee = J . dq)
+    Jinv_pseudo = numpy.linalg.pinv(J, rcond=0.001)  # default rcond=1e-15
     
     # Compute differential joint velocities (dq) 
-    dq = numpy.matmul(Jinv, Vee)
+    dq_raw = numpy.matmul(Jinv_pseudo, Vee)
+    # rospy.loginfo('dq: %s', dq)
     
-    # TODO: add threshold 
-    dq = numpy.clip(dq, -1, 1)
+    # Set threshold to dq to avoid excessive motion close to singularities 
+    angular_vel_limit = 2.0  # rad/s
+    # dq = vector_norm_threshold(dq_raw, abs(angular_vel_limit)) # option1: norm threshold
+    dq = vector_component_threshold(dq_raw, abs(angular_vel_limit)) # option2: component threshold
     
     # ##### Null space control #####
     # ##############################
-    # if red_control:
-    #     dq_nullSpace = numpy.zeros(num_joints)
-    #     numpy.put(dq_nullSpace, [0], q0_desired - q_current[0])
-    #     q0_vel = gain * dq_nullSpace
-
-    #     original_pseudoInv_J = numpy.linalg.pinv(Jacobian, 0.01)
-    #     nullSpace = numpy.subtract(numpy.identity(6), numpy.dot(original_pseudoInv_J, J))
-    #     q0_null_vel = numpy.dot(nullSpace, q0_vel)
-
-    #     dq = numpy.add(dq, q0_null_vel)
+    if red_control:
+        # The 7-DOF Kuka robot is redundant which means there are joints velocities that do not affect the end-effector motion.
+        # In other words, there are dq that are in the null space of the Jacobian.
+        # To find the dq that result in J.dq=0 (no motion of the end-effector), we need to project the dq into the null space of the Jacobian.
+        
+        # Initialize dq_n with the desired first joint velocity
+        # This could be done for any joint but the marker should also be adjusted
+        dq_n = numpy.zeros(num_joints)
+        dq_n[0] = q0_desired - q_current[0]
+        
+        # Compute the null space of the Jacobian
+        I = numpy.identity(num_joints)
+        Jinv = numpy.linalg.pinv(J, rcond=0) # not sure this is needed
+        dq_nullspace = numpy.subtract(I, numpy.dot(Jinv, J)) 
+        
+        # Project dq_n into the null space
+        dq_n = numpy.dot(dq_nullspace, dq_n) 
+        
+        # Update the original dq with the null space component (new set of joint velocities that keep the end-effector motion)
+        dq = numpy.add(dq, dq_n)
 
     return dq
     
