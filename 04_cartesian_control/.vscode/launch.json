@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "ROS: Launch marker control",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/cartesian_control/launch/launch_marker_control.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros"
+        },
+        {
+            "name": "ROS: Launch manual control",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/cartesian_control/launch/launch_manual_control.launch",
+            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "type": "ros"
+        }
+    ]
+}

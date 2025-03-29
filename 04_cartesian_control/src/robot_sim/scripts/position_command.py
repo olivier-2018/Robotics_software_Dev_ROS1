@@ -2,7 +2,7 @@
 
 import numpy
 
-from Tkinter import Tk, Button, Entry, Label, END
+from tkinter import Tk, Button, Entry, Label, END
 from functools import partial
 
 import rospy

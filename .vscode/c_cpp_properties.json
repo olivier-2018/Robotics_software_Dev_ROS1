@@ -6,10 +6,7 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
-        "/home/alcor/Robotics_software_Dev_ROS1/04_differential-kinematics/devel/include/**",
         "/opt/ros/noetic/include/**",
-        "/home/alcor/Robotics_software_Dev_ROS1/04_differential-kinematics/src/robot_sim/include/**",
-        "/home/alcor/Robotics_software_Dev_ROS1/04_differential-kinematics/src/tf2_web_republisher/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",

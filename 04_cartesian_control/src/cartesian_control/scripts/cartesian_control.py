@@ -38,9 +38,26 @@ def translation_matrix(matrix):
     return t43
 
 
-# This is the function that must be filled in as part of the Project.
 def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
                       red_control, q_current, q0_desired):
+    """The cartesian control function computes the joint velocities
+    required to move the end effector from the current pose to the desired pose.
+    It uses the Jacobian of the robot to compute the joint velocities based on the
+    desired end effector velocity.
+    
+    Input args:
+    - joint_transforms: The transforms of the joints in the robot.
+    - b_T_ee_current: The current transform of the end effector in the base frame.
+    - b_T_ee_desired: The desired transform of the end effector in the base frame.
+    - red_control: A boolean indicating whether to use redundancy control.
+    - q_current: The current joint angles of the robot.
+    - q0_desired: The desired joint angle for the redundant degree of freedom.
+    
+    Returns:
+    numpy array [3]: joint velocities (dq) required to move the end effector
+    from the current pose to the desired pose.
+    """
+    # Initialize dq
     num_joints = len(joint_transforms)
     dq = numpy.zeros(num_joints)
 
@@ -48,22 +65,27 @@ def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
     ee_T_b_current = numpy.linalg.inv(b_T_ee_current)
     EEcur_T_EEdes = numpy.matmul(ee_T_b_current, b_T_ee_desired)
     
-    # Extract translation and rotation part of current-to-Desired Transform
+    # Extract translation and rotation part of current-to-Desired Transform (EEcur_T_EEdes)
     dX_trans = translation_matrix(EEcur_T_EEdes)
     angle, axis = rotation_from_matrix(rotation_matrix(EEcur_T_EEdes))
     dX_rot = angle * axis
     
-    # Compute dX (already in EE coord frame as computed from Transforms)
+    # TODO: introduce a tranlation and rotation velocity threshold
+    
+    # Compute dX (already in EE coordinate frame as computed from Transforms)
     dX_eeframe = numpy.concatenate([dX_trans, dX_rot])
     
-    # Compute Vee as proportional system
+
+    # Compute End-Effector velocity Vee as a proportional system
     gain = 2
     Vee = gain * dX_eeframe 
 
-    # Compute Jacobian
+    ##### Compute Jacobian #####
+    ############################
     Z = numpy.zeros((3,3))
     J = []    
     
+    # For each joint Transform (i.e Transform from base frame to each joint frame), compute the Jacobian
     for b_T_j in joint_transforms:
         
         # compute  Translation from Joint to EE
@@ -86,10 +108,29 @@ def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
         J.append(Vj[:,5])
     
     Jacobian=numpy.array(J)
+    
+    # Compute Jacobian inverse using Moore-Penrose pseudo-inverse function 
     Jinv = numpy.linalg.pinv(Jacobian.T, 0.001)
     
+    # Compute differential joint velocities (dq) 
     dq = numpy.matmul(Jinv, Vee)
     
+    # TODO: add threshold 
+    dq = numpy.clip(dq, -1, 1)
+    
+    # ##### Null space control #####
+    # ##############################
+    # if red_control:
+    #     dq_nullSpace = numpy.zeros(num_joints)
+    #     numpy.put(dq_nullSpace, [0], q0_desired - q_current[0])
+    #     q0_vel = gain * dq_nullSpace
+
+    #     original_pseudoInv_J = numpy.linalg.pinv(Jacobian, 0.01)
+    #     nullSpace = numpy.subtract(numpy.identity(6), numpy.dot(original_pseudoInv_J, J))
+    #     q0_null_vel = numpy.dot(nullSpace, q0_vel)
+
+    #     dq = numpy.add(dq, q0_null_vel)
+
     return dq
     
 def convert_from_message(t):
@@ -104,22 +145,36 @@ def convert_from_message(t):
     return T
 
 # Returns the angle-axis representation of the rotation contained in the input matrix
-# Use like this:
-# angle, axis = rotation_from_matrix(R)
 def rotation_from_matrix(matrix):
+    """ Extracts the rotation angle and axis from a rotation matrix.
+    Notes:
+    The rotation matrix is assumed to be a proper rotation matrix (orthogonal with determinant 1).
+    The function raises a ValueError if the input matrix is not a valid rotation matrix.
+
+    Args:
+        matrix (_type_): rotation matrix (assumed to be a 4x4 homogeneous transformation matrix)
+
+    Returns:
+        angle, axis: rotation angle in radians and the rotation axis as a 3D vector.
+    """
+    # Extract the roation matrix from the 4x4 homogeneous transformation matrix
     R = numpy.array(matrix, dtype=numpy.float64, copy=False)
     R33 = R[:3, :3]
-    # axis: unit eigenvector of R33 corresponding to eigenvalue of 1
+    
+    # Extract the axis corresponding to the unit eigenvector of R33 (corresponding to eigenvalue of 1)
     l, W = numpy.linalg.eig(R33.T)
+    # w, v = numpy.linalg.eig(R33) # eighenvalues, nomalized unit length
     i = numpy.where(abs(numpy.real(l) - 1.0) < 1e-8)[0]
     if not len(i):
         raise ValueError("no unit eigenvector corresponding to eigenvalue 1")
     axis = numpy.real(W[:, i[-1]]).squeeze()
+    
     # point: unit eigenvector of R33 corresponding to eigenvalue of 1
     l, Q = numpy.linalg.eig(R)
     i = numpy.where(abs(numpy.real(l) - 1.0) < 1e-8)[0]
     if not len(i):
         raise ValueError("no unit eigenvector corresponding to eigenvalue 1")
+    
     # rotation angle depending on axis
     cosa = (numpy.trace(R33) - 1.0) / 2.0
     if abs(axis[2]) > 1e-8:
@@ -132,6 +187,14 @@ def rotation_from_matrix(matrix):
     return angle, axis
 
 class CartesianControl(object):
+    """ This class implements a ROS node that subscribes to joint state information
+    and computes the joint velocities required to move the end effector of a robot
+    to a desired pose in Cartesian space. The class uses the URDF model of the robot
+    to compute the Jacobian and the inverse kinematics required for the control.
+    The class also subscribes to commands for the desired end-effector pose and
+    the desired joint angle for the redundant degree of freedom.
+    It publishes the computed joint velocities to a ROS topic.
+    """
 
     #Initialization
     def __init__(self):
@@ -164,6 +227,11 @@ class CartesianControl(object):
         self.mutex = Lock()
         self.timer = rospy.Timer(rospy.Duration(0.1), self.timer_callback)
 
+    # Callback functions (called when a message is received on the subscribed topic)
+    # to update the class variables with the new data
+    # Note: 
+    # The mutex is acquired before modifying the data and released after the modification is done
+    # to ensure that the data is not being modified while it is being read
     def command_callback(self, command):
         self.mutex.acquire()
         self.x_target = convert_from_message(command)
@@ -175,7 +243,12 @@ class CartesianControl(object):
         self.q0_desired = command.data
         self.last_red_command_time = time.time()
         self.mutex.release()        
-        
+    
+    # Timer callback function that is called periodically to compute the joint velocities
+    # and publish them to the joint_velocities topic
+    # Note:
+    # The function also checks if the last command was received within a certain time frame
+    # to determine if the robot should stop moving or continue moving
     def timer_callback(self, event):
         msg = JointState()
         self.mutex.acquire()
@@ -193,7 +266,12 @@ class CartesianControl(object):
             msg.velocity = numpy.zeros(7)
         self.mutex.release()
         self.pub_vel.publish(msg)
-        
+    
+    # Callback function that is called when a new joint state message is received
+    # It updates the joint transforms and the current joint angles
+    # Note:
+    # The function also computes the transform from the base frame to the end effector frame
+    # and stores it in the class variable x_current
     def joint_callback(self, joint_values):
         root = self.robot.get_root()
         T = tf.transformations.identity_matrix()
@@ -203,6 +281,9 @@ class CartesianControl(object):
         self.process_link_recursive(root, T, joint_values)
         self.mutex.release()
 
+    # This function computes the transformation matrix that aligns the rotation axis with the z-axis
+    # It uses the axis of rotation and the angle of rotation to compute the transformation matrix
+    # The function returns the transformation matrix that aligns the rotation axis with the z-axis
     def align_with_z(self, axis):
         T = tf.transformations.identity_matrix()
         z = numpy.array([0,0,1])
