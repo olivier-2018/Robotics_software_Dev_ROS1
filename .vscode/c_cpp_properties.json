@@ -6,7 +6,10 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
+        "/home/alcor/Robotics_software_Dev_ROS1/06_motion/devel/include/**",
         "/opt/ros/noetic/include/**",
+        "/home/alcor/Robotics_software_Dev_ROS1/06_motion/src/robot_sim/include/**",
+        "/home/alcor/Robotics_software_Dev_ROS1/06_motion/src/tf2_web_republisher/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
