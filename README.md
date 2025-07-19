@@ -65,10 +65,11 @@ Some shortcuts:
 
 ## VScode ROS debugging
 
-ROS extension only allows launch file debugging  
-Run & Debug > Select Launch File > ...  
-1 - Select "ROS" (make sure you do not have a python or cpp file open)  
-2 - Select "ROS: Launch"  
+Note: ROS extension only allows "launch file" debugging  
+
+step 1: go to VScode "Run & Debug" tab > Select Create Launch.json File > ...  
+1 - Select "ROS 1" (make sure you do not have a python or cpp file open)  
+2 - Select "ROS 1: Launch"  
 3 - Select package to be debugged  
 4 - Select the launch file  
 5 - Optional: In the launch.json file, set filter using "launch" to specify nodes NOT to attach the debugger to.  

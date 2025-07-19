@@ -169,7 +169,7 @@ class MoveArm(object):
                 
     def motion_plan(self, q_start, q_goal, q_min, q_max):
         print(q_min, q_max)
-        # =========================== Replace this with your code
+        # ===========================
         print("===== Motion Planning =====")
     
         def get_random_q(qmin, qmax):

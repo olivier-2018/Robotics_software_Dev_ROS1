@@ -6,10 +6,15 @@
     "configurations": [
 
         {
-            "name": "ROS: Launch",
+            "name": "ROS 1 debug: motion_planning.launch",
             "request": "launch",
             "target": "${workspaceFolder}/src/motion_planning/launch/motion_planning.launch",
-            "launch": ["rviz", "gz", "gzclient", "gzserver"],
+            "launch": [
+                "rviz",
+                "gz",
+                "gzclient",
+                "gzserver"
+            ],
             "type": "ros"
         }
     ]

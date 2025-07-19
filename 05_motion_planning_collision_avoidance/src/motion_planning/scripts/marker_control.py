@@ -48,12 +48,10 @@ class MarkerControl(object):
         self.og = ObstacleGenerator()
 
         # Publisher to send commands
-        self.pub_command = rospy.Publisher("/motion_planning_goal", geometry_msgs.msg.Transform, 
-                                           queue_size=1)        
+        self.pub_command = rospy.Publisher("/motion_planning_goal", geometry_msgs.msg.Transform, queue_size=1)         
        
         # Subscriber to slighly reduce obstacle size once trajectory is sent
-        rospy.Subscriber("/joint_trajectory", trajectory_msgs.msg.JointTrajectory, 
-                         self.execute_motion_cb)
+        rospy.Subscriber("/joint_trajectory", trajectory_msgs.msg.JointTrajectory, self.execute_motion_cb)
 
         # Create interactive marker
         self.init_marker()
@@ -110,7 +108,8 @@ class MarkerControl(object):
         self.server = InteractiveMarkerServer("control_markers")
 
         control_marker = InteractiveMarker()
-        control_marker.header.frame_id = "/world_link"
+        # control_marker.header.frame_id = "/world_link"
+        control_marker.header.frame_id = "world_link"
         control_marker.name = "move_arm_marker"
 
         move_control = InteractiveMarkerControl()
