@@ -1,11 +1,14 @@
 # Robotics software Development with ROS1
 Learning robotics using ROS1 on a 7DoF Kuka robotic arm.
 
-Synopsis:
+**Synopsis:**  
 - ROS concepts
 - urdf and xacro
-- kinematics  with TF2 transforms
-- 
+- publisher-listener ROS concept
+- kinematics & IK with TF2 transforms
+- Cartesian control and differential kinematics
+- Control space and motion control
+- Path planning and collision avoidance with A* algorithm
 
 ## Setup and dependencies
 sudo apt install python3-tk
@@ -58,6 +61,8 @@ Some shortcuts:
 - CTRL+SHIFT+P : "ros:create terminal" --> create Terminal on clien (usefull if running VScode over SSH)  
 - CTRL+SHIFT+P : "ros:urdf" --> uses ROS web tool to display urdf  
 
+<img src="_images/00_ROS_extension.png" alt="ROS extension menu" height="400">
+
 ## VScode ROS debugging
 
 ROS extension only allows launch file debugging  
@@ -68,9 +73,21 @@ Run & Debug > Select Launch File > ...
 4 - Select the launch file  
 5 - Optional: In the launch.json file, set filter using "launch" to specify nodes NOT to attach the debugger to.  
 
-Best practice: Organize project in multiple launch files with few number of nodes to make it easier to debug (combine nodes that work together)  
+**Best practice:**  
+Organize project in multiple launch files with few number of nodes to make it easier to debug (combine nodes that work together)  
 
-Note: source the following:
+**Note:**  
+source the following:
 ```bash
 export ROSCONSOLE_FORMAT="[\${severity}] [\${time:%Y-%m-%d %H:%M:%S}]: \${message}"
 ```
+
+## Acknowledgements:
+
+Big thanks to:
+- RobotWebTools for their github repo (https://github.com/RobotWebTools/tf2_web_republisher)
+- Ranch-Hand-Robotics for their ROS1 (& ROS2) VScode extensions
+- ROS cheatsheet: https://mirror.umd.edu/roswiki/attachments/de/ROScheatsheet.pdf
+
+## TODOs:
+- implement on ROS2

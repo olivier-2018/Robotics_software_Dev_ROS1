@@ -4,8 +4,7 @@ This goal of this chapter is to implement the forward kinematics from the **Dena
 
 ## Setup
 
-Build the project:
-
+### Build the project manually:
 ```bash
 source /opt/ros/noetic/setup.zsh
 cd 03_kinematics
@@ -13,7 +12,27 @@ catkin_make
 source devel/setup.zsh 
 ```
 
-Execute:
+### Build the project with VScode ROS extension
+
+- install VScode extension
+- source ROS distro 
+- From VScode,
+    - initiate roscore (ctrl+shft+P, then select "ros: start")
+    - Update python path (ctrl+shft+P, then select "ros: Update Python path")
+    - Check using correct python interpreter (ctrl+shft+P, then select "Python: select interpreter")
+    - Build (ctrl+shft+B), select "catkin_build: build"
+
+## Launch the project
+
+### Run project using roslaunch:
+
+```bash
+roslaunch src/robot_mover/launch/launch_robot-mover.launch
+
+roslaunch src/forward_kinematics/launch/launch_fwd_kinematics.launch
+```
+
+### Run project manually:
 
 ```bash
 roscore
@@ -29,14 +48,6 @@ Then, in RVIZ:
 - add robotModel
 - add TF
 
-
-Alternatively, use the following launch files:
-
-```bash
-roslaunch src/robot_mover/launch/launch_robot-mover.launch
-
-roslaunch src/forward_kinematics/launch/launch_fwd_kinematics.launch
-```
 
 ## Packages
 

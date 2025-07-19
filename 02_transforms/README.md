@@ -5,7 +5,7 @@
 
 ## Setup
 
-Build the project:
+### Build the project manually:
 ```bash
 source /opt/ros/noetic/setup.zsh
 cd 02_transforms
@@ -21,7 +21,25 @@ Package dependencies:
 sudo apt-get install ros-noetic-rviz
 ```
 
-Execute:
+### Build the project with VScode ROS extension
+
+- install VScode extension
+- source ROS distro 
+- From VScode,
+    - initiate roscore (ctrl+shft+P, then select "ros: start")
+    - Update python path (ctrl+shft+P, then select "ros: Update Python path")
+    - Check using correct python interpreter (ctrl+shft+P, then select "Python: select interpreter")
+    - Build (ctrl+shft+B), select "catkin_build: build"
+
+
+## Launch the project
+
+### Run project using roslaunch:
+```bash
+roslaunch src/transform_publisher/launch/launch_TF_publisher.launch     
+```
+
+### Run project manually:
 ```bash
 # Launch Roscor
 roscore
@@ -43,12 +61,6 @@ Then, in rviz:
 
 - You can also add the item "TF" if you want to see a visual representation of the frames.
 
-
-Alternatively, use the launch files:
-
-```bash
-roslaunch src/transform_publisher/launch/launch_TF_publisher.launch     
-```
 
 ## VScode Setup
 

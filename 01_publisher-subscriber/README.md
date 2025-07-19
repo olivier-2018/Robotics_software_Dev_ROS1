@@ -9,7 +9,7 @@
 
 ## Setup
 
-Build the project:
+### Build the project manually:
 ```bash
 source /opt/ros/noetic/setup.zsh
 cd 01_publisher-subscriber
@@ -17,6 +17,16 @@ cd 01_publisher-subscriber
 catkin_make
 source devel/setup.zsh 
 ```
+
+### Build the project with VScode ROS extension
+
+- install VScode extension
+- source ROS distro 
+- From VScode,
+    - initiate roscore (ctrl+shft+P, then select "ros: start")
+    - Update python path (ctrl+shft+P, then select "ros: Update Python path")
+    - Check using correct python interpreter (ctrl+shft+P, then select "Python: select interpreter")
+    - Build (ctrl+shft+B), select "catkin_build: build"
 
 Execute:
 ```bash
