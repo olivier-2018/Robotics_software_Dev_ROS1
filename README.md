@@ -14,19 +14,37 @@ sudo apt install python3-tk
 ## Tutorials
 
 ### turorial 1: basic publisher-listener
+This tuorial is based on ROS pub-sub tutorial and simply showcases how to publish a msg (topic) with 2 integers and how to subscribe to it, perform a simple addition of the integers and print the sum on the screen. Nothing fancy. 
 
-<img src="_images/01_pub-sub.png" alt="Publisher-Subscriber communication" width="800">
+<img src="_images/01_pub-sub.png" alt="Publisher-Subscriber communication" width="1024">
 
 ### turorial 2: TF transforms between object frames
+This tutorial teaches how to work with TFs, an essential concept in robotics and ROS.
 
-<img src="_images/02_markers.png" alt="Transform publisher" width="400">
-<img src="_images/02_rviz.png" alt="Markers in RVIZ" width="400">
+<img src="_images/02_markers.png" alt="Transform publisher" width="1024">
+<img src="_images/02_rviz.png" alt="Markers in RVIZ" width="1024">
 
 
 ### turorial 3: TF transforms on KUKA LWR 7-DOF joint frames
+This tutorial build on the previous ones and illustrates how to evaluate a robot's inverse kinematics and publish the TFs for a 7-DOF KUKA robot.
 
 <img src="_images/03_kuka_home.png" alt="Robot home" height="500">
 <img src="_images/03_kuka_max.png" alt="Robot flex" height="500">
+
+### turorial 4: Cartesian control for the End-Effector
+This tutorial illustrates how to control the position of the End-Effector relatively to its current position.  
+This concept is slightly more advanced and deals with kinematics, inverse kinematics, differential kinematics and singularities avoidance.  One important concept introduced is of the **numerical Jacobian** computation, an essential tool for robot manpulation.   
+
+This tutorial also introduces the concept of **null space control** whereby a redundant robot (a robot with more DOFs than the minimum required to achieve a given pose) can achieve a target EE pose in mutliple ways similarly to the human arm.  
+
+<img src="_images/04_Kuka_manual.png" alt="Manual EE control" height="500">
+<img src="_images/04_kuka_markers.png" alt="Marker EE control" height="500">
+
+### turorial 5: Motion planning with A* algorithm
+This tutorial builds up on prior tutorials and illustrates how to compute a path for the End-Effector in the  the **configuration space** of the robot i.e the space of possible joint configurations of the robot, using the **A* algorithm**.  
+
+The A* algorithm finds the shortest route between two points by combining the **actual cost** from the start and an **estimated cost** to the goal to decide which path to explore next. This approach balances speed and accuracy, and efficiently picks the most promising route forward.
+
 
 
 ## VScode ROS extension
